@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Exam</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<style>
+    * {
+        vertical-align: top;
+        font-family: sans-serif;
+    }
+
+    #top {
+        border-style: solid;
+        border-color: black;
+        margin-bottom: 20px;
+    }
+
+    #quotes {
+        border-style: solid;
+        border-color: black;
+        padding: 20px;
+        margin: 100px;
+        width: 30%;
+        display:inline-block;
+    
+    }
+
+    textarea {
+        width: 100%;
+    }
+
+    ul.messages {
+        color: red;
+    }
+    #addquote{
+        border-style: solid;
+        border-color: black;
+        padding: 20px;
+        margin: 100px;
+        width: 30%;
+        display:inline-block;
+    }
+</style>
+
+<body>
+
+    <div id='top'>
+        Welcome, {{ request.session.user_first }}
+        <button onclick="window.location.href = '/clear';">Log Out</button>
+        <button onclick="window.location.href = '/account/{{request.session.user_id}}';">Account Page</button>
+    </div>
+
+    <div id='quotes'>
+
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                {% endfor %}
+        </ul>
+        {% endif %}
+
+
+
+
+        <h2>Quotes</h2>
+        
+        
+        {% for message in all_messages reversed %} 
+        
+
+        Posted By
+
+        <a href="/post/{{message.user.id}}">
+        <h5>{{message.user.first_name}} {{message.user.last_name}} </a>
+        <!-- delete messages user posted -->   
+        {% if message.user.id == request.session.user_id %}
+        <a href="/delete_message/{{message.id}}">Delete Quote</a>
+   
+        {% endif %} </h5>
+
+        {{ message.author }}:
+        {{ message.message }} <br>
+    
+        
+        Liked {{message.like.count}} times
+        <a href="/like_message/{{message.id}}">like</a>
+        {% for like in message.like.all %}
+        {% if like.id == reuqest.session.user_id %}
+        <p>I liked this</p>
+    
+        
+        {% endif %}
+        {% endfor %}
+            <br> <br>
+        {% endfor %}
+
+    </div>
+
+    <div id='addquote'>
+        <h1>Add a Quote</h1>
+
+         <form action="/message" method="POST">
+                {% csrf_token %}
+                Author<textarea name="name" rows="" cols=""></textarea>
+                <br><br>
+                Quote<textarea name="message" rows="" cols=""></textarea>
+                <br><br>
+                <center><input type="submit" value="Submit"></center>
+            </form>
+
+        </div>
+
+</body>
+
+</html>

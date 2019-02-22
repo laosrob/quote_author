@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Exam</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<style>
+    * {
+        vertical-align: top;
+        font-family: sans-serif;
+    }
+
+    #top {
+        border-style: solid;
+        border-color: black;
+        margin-bottom: 20px;
+    }
+
+    #wall {
+        border-style: solid;
+        border-color: black;
+        padding: 20px;
+        margin: 100px;
+        width: 70%;
+        margin: 0 auto;
+    }
+
+    textarea {
+        width: 100%;
+    }
+
+    #comments {
+        padding-top: 0px;
+        padding-right: 10px;
+        padding-left: 20px;
+        padding-bottom: 0px;
+    }
+
+    ul.messages {
+        color: red;
+    }
+</style>
+
+<body>
+
+    <div id='top'>
+        <h1>Quotes</h1> Welcome, {{ request.session.user_first }}
+        <button onclick="window.location.href = '/clear';">Log Out</button>
+        <button onclick="window.location.href = '/quotes';">Quote Dashboard</button>
+    </div>
+
+    <div id='wall'>
+        {% for message in all_messages reversed %}
+        <!-- shows only messages of that user -->
+        {% if user.id == message.user.id %}
+        <a href="/post/{{message.user.id}}">
+        <h5>{{message.user.first_name}} {{message.user.last_name}} </a>
+        <!-- delete messages user posted -->   
+        {% if message.user.id == request.session.user_id %}
+        <a href="/delete_message/{{message.id}}">Delete Message</a>
+        {% endif %} </h5>
+        {{ message.author }} :
+        
+        <p>{{ message.message }} </p>
+
+        <br>
+
+        {% endif %}
+        {% endfor %}
+
+    </div>
+</body>
+
+</html>
