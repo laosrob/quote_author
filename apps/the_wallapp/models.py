@@ -19,7 +19,7 @@ class UserManager(models.Manager):
 class Message(models.Model):
     author = models.CharField(max_length=45)
     message = models.TextField()
-    user = models.ForeignKey(User, related_name="messages")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="messages")
     like = models.ManyToManyField(User, related_name="liked_messages")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
